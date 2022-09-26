@@ -11,17 +11,20 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(10),
-        child: TextField(
-            onSubmitted: (value) {
-              Provider.of<RestaurantsProvider>(context,listen: false).searchRestaurant(value.trim().isEmpty?" ":value.trim());
-            },
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: fourthColor,
-              contentPadding: EdgeInsets.all(10),
-              border: OutlineInputBorder(),
-              hintText: "Search",
-            )));
+      padding: const EdgeInsets.all(10),
+      child: TextField(
+        onSubmitted: (value) {
+          Provider.of<RestaurantsProvider>(context, listen: false)
+              .searchRestaurant(value.trim().isEmpty ? " " : value.trim());
+        },
+        decoration: const InputDecoration(
+          filled: true,
+          fillColor: fourthColor,
+          contentPadding: EdgeInsets.all(10),
+          border: OutlineInputBorder(),
+          hintText: "Search",
+        ),
+      ),
+    );
   }
 }

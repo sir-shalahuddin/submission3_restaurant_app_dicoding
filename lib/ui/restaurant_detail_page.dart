@@ -95,10 +95,10 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                                 Flexible(
                                   flex: 3,
                                   child: Container(
-                                      margin: const EdgeInsets.only(left: 5),
-                                      child: Rating(
-                                          restaurant:
-                                              state.result!.restaurant)),
+                                    margin: const EdgeInsets.only(left: 5),
+                                    child: Rating(
+                                        restaurant: state.result!.restaurant),
+                                  ),
                                 ),
                               ],
                             ),
@@ -282,87 +282,88 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
   Card buildAddReviewButton(
       BuildContext context, CustomerReviewsProvider state2) {
     return Card(
-        color: secondaryColor,
-        child: InkWell(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                contentPadding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-                actionsPadding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                backgroundColor: thirdColor,
-                title: const Text("How is it?"),
-                content: Form(
-                  key: state2.formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                        controller: state2.nameController,
-                        decoration: inputDecorationTemplate(
-                            const EdgeInsets.symmetric(horizontal: 20),
-                            "Enter your name"),
-                        validator: (value) => validatorInput(
-                            value, "Please enter your name first"),
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        controller: state2.feedbackController,
-                        decoration: inputDecorationTemplate(
-                            const EdgeInsets.fromLTRB(20, 50, 20, 50),
-                            "Enter your Feedback"),
-                        validator: (value) => validatorInput(
-                            value, "Please enter your feedback first"),
-                      ),
-                    ],
-                  ),
+      color: secondaryColor,
+      child: InkWell(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              contentPadding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+              actionsPadding:
+                  const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              backgroundColor: thirdColor,
+              title: const Text("How is it?"),
+              content: Form(
+                key: state2.formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      controller: state2.nameController,
+                      decoration: inputDecorationTemplate(
+                          const EdgeInsets.symmetric(horizontal: 20),
+                          "Enter your name"),
+                      validator: (value) =>
+                          validatorInput(value, "Please enter your name first"),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: state2.feedbackController,
+                      decoration: inputDecorationTemplate(
+                          const EdgeInsets.fromLTRB(20, 50, 20, 50),
+                          "Enter your Feedback"),
+                      validator: (value) => validatorInput(
+                          value, "Please enter your feedback first"),
+                    ),
+                  ],
                 ),
-                actions: <Widget>[
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(ctx);
-                    },
-                    child: const Text('Cancel'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (state2.formKey.currentState!.validate()) {
-                        Provider.of<CustomerReviewsProvider>(context,
-                                listen: false)
-                            .postReview()
-                            .then((value) => {
-                                  if (value.runtimeType != String)
-                                    state2.setCustomerReviews(
-                                        value.customerReviews)
-                                  else
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar)
-                                });
-                        state2.nameController.clear();
-                        state2.feedbackController.clear();
-                        Navigator.of(ctx).pop();
-                        if (Provider.of<CustomerReviewsProvider>(context,
-                                    listen: false)
-                                .addReviewState ==
-                            ResultState.error) {
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
-                      }
-                    },
-                    child: const Text('Submit'),
-                  )
-                ],
               ),
-            );
-          },
-          child: const ListTile(
-            title: Text(
-              "Add review",
-              textAlign: TextAlign.center,
+              actions: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                  },
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (state2.formKey.currentState!.validate()) {
+                      Provider.of<CustomerReviewsProvider>(context,
+                              listen: false)
+                          .postReview()
+                          .then((value) => {
+                                if (value.runtimeType != String)
+                                  state2
+                                      .setCustomerReviews(value.customerReviews)
+                                else
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar)
+                              });
+                      state2.nameController.clear();
+                      state2.feedbackController.clear();
+                      Navigator.of(ctx).pop();
+                      if (Provider.of<CustomerReviewsProvider>(context,
+                                  listen: false)
+                              .addReviewState ==
+                          ResultState.error) {
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    }
+                  },
+                  child: const Text('Submit'),
+                )
+              ],
             ),
+          );
+        },
+        child: const ListTile(
+          title: Text(
+            "Add review",
+            textAlign: TextAlign.center,
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   String? validatorInput(value, warningText) {

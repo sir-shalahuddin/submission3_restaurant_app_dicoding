@@ -44,13 +44,17 @@ class MyApp extends StatelessWidget {
       initialRoute: RestaurantsListPage.routeName,
       routes: {
         RestaurantsListPage.routeName: (context) => ChangeNotifierProvider(
-            create: (_) => RestaurantsProvider(apiService: ApiService()),
-            child: const RestaurantsListPage()),
-        RestaurantDetailPage.routeName: (context) => ChangeNotifierProvider(
-            create: (_) => RestaurantProvider(
+              create: (_) => RestaurantsProvider(
                 apiService: ApiService(),
-                id: ModalRoute.of(context)?.settings.arguments as String),
-            child: const RestaurantDetailPage()),
+              ),
+              child: const RestaurantsListPage(),
+            ),
+        RestaurantDetailPage.routeName: (context) => ChangeNotifierProvider(
+              create: (_) => RestaurantProvider(
+                  apiService: ApiService(),
+                  id: ModalRoute.of(context)?.settings.arguments as String),
+              child: const RestaurantDetailPage(),
+            ),
       },
     );
   }
