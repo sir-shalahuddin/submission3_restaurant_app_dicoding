@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:submission1_restaurant_app/restaurant.dart';
-import 'package:submission1_restaurant_app/restaurant_detail_page.dart';
-import 'package:submission1_restaurant_app/restaurant_list_page.dart';
-import 'package:submission1_restaurant_app/styles.dart';
+import 'package:provider/provider.dart';
+import 'package:submission2_restaurant_app/common/styles.dart';
+import 'package:submission2_restaurant_app/data/api/api_service.dart';
+import 'package:submission2_restaurant_app/provider/restaurant_provider.dart';
+import 'package:submission2_restaurant_app/provider/restaurants_provider.dart';
+import 'package:submission2_restaurant_app/ui/restaurant_detail_page.dart';
+import 'package:submission2_restaurant_app/ui/restaurant_list_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,11 +43,14 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: RestaurantsListPage.routeName,
       routes: {
-        RestaurantsListPage.routeName: (context) => const RestaurantsListPage(),
-        RestaurantDetailPage.routeName: (context) => RestaurantDetailPage(
-              restaurant:
-                  ModalRoute.of(context)?.settings.arguments as Restaurant,
-            ),
+        RestaurantsListPage.routeName: (context) => ChangeNotifierProvider(
+            create: (_) => RestaurantsProvider(apiService: ApiService()),
+            child: const RestaurantsListPage()),
+        RestaurantDetailPage.routeName: (context) => ChangeNotifierProvider(
+            create: (_) => RestaurantProvider(
+                apiService: ApiService(),
+                id: ModalRoute.of(context)?.settings.arguments as String),
+            child: const RestaurantDetailPage()),
       },
     );
   }

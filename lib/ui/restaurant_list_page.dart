@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:submission1_restaurant_app/restaurant.dart';
-import 'package:submission1_restaurant_app/restaurant_detail_page.dart';
-import 'package:submission1_restaurant_app/styles.dart';
-import 'package:submission1_restaurant_app/widget/error_image_handler.dart';
-import 'package:submission1_restaurant_app/widget/loading_builder.dart';
-import 'package:submission1_restaurant_app/widget/rating_icon.dart';
+import 'package:provider/provider.dart';
+import 'package:submission2_restaurant_app/common/styles.dart';
+import 'package:submission2_restaurant_app/data/model/restaurant.dart';
+import 'package:submission2_restaurant_app/provider/restaurants_provider.dart';
+import 'package:submission2_restaurant_app/ui/restaurant_detail_page.dart';
+import 'package:submission2_restaurant_app/widgets/error_image_handler.dart';
+import 'package:submission2_restaurant_app/widgets/loading_builder.dart';
+import 'package:submission2_restaurant_app/widgets/rating_icon.dart';
+import 'package:submission2_restaurant_app/widgets/search_bar.dart';
 
 class RestaurantsListPage extends StatefulWidget {
   static const routeName = '/article_list';
@@ -16,10 +19,6 @@ class RestaurantsListPage extends StatefulWidget {
 }
 
 class _RestaurantsListPageState extends State<RestaurantsListPage> {
-  late List<Restaurant> _restaurants;
-  List<Restaurant> _filteredRestaurants = [];
-  late final Set<String> _uniqueCity = {};
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,113 +29,74 @@ class _RestaurantsListPageState extends State<RestaurantsListPage> {
         ),
         backgroundColor: primaryColor,
       ),
-      body: FutureBuilder<String>(
-        future: DefaultAssetBundle.of(context)
-            .loadString('assets/json/local_restaurant.json'),
-        builder: (context, snapshot) {
-          _restaurants = parseRestaurants(snapshot.data);
-          _restaurants
-              .where((element) => _uniqueCity.add(element.city))
-              .toList();
-          return Container(
-            color: secondaryColor,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          padding: const EdgeInsets.only(left: 15),
-                          child: Text(
-                            'City :',
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                        ),
+      body: Container(
+        color: secondaryColor,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const SearchBar(),
+            Expanded(
+              flex: 30,
+              child: Consumer<RestaurantsProvider>(
+                builder: (context, state, _) {
+                  if (state.state == ResultState.loading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state.state == ResultState.hasData) {
+                    return GridView.builder(
+                      itemCount:
+                      state.restaurantList.length,
+                      itemBuilder: (context, index) {
+                        return _buildRestaurants(
+                            context,
+                            state.restaurantList[index]);
+                      },
+                      gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisSpacing: 0,
+                        mainAxisSpacing: 15,
+                        crossAxisCount: 2,
+                        childAspectRatio: 3 / 4,
                       ),
-                      Expanded(
-                        flex: 9,
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.only(right: 10),
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _uniqueCity.length + 1,
-                            itemBuilder: (context, index) {
-                              if (index == 0) {
-                                return _buildCity(context, 'All');
-                              } else {
-                                return _buildCity(
-                                    context, _uniqueCity.toList()[index - 1]);
-                              }
-                            },
-                          ),
-                        ),
+                    );
+                  } else if (state.state == ResultState.noData) {
+                    return Center(
+                      child: Material(
+                        color: secondaryColor,
+                        child: Text(state.message),
                       ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 30,
-                  child: GridView.builder(
-                    itemCount: _filteredRestaurants.isNotEmpty
-                        ? _filteredRestaurants.length
-                        : _restaurants.length,
-                    itemBuilder: (context, index) {
-                      return _buildRestaurants(
-                          context,
-                          _filteredRestaurants.isNotEmpty
-                              ? _filteredRestaurants[index]
-                              : _restaurants[index]);
-                    },
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisSpacing: 0,
-                      mainAxisSpacing: 15,
-                      crossAxisCount: 2,
-                      childAspectRatio: 3 / 4,
-                    ),
-                  ),
-                ),
-              ],
+                    );
+                  } else if (state.state == ResultState.error) {
+                    return Center(
+                      child: Material(
+                        color: secondaryColor,
+                        child: Text(state.message),
+                      ),
+                    );
+                  } else {
+                    return const Center(
+                      child: Material(
+                        child: Text(''),
+                      ),
+                    );
+                  }
+                },
+              ),
             ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildCity(BuildContext context, String city) {
-    return Container(
-      margin: const EdgeInsets.all(2),
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            city != "All"
-                ? _filteredRestaurants = _restaurants
-                    .where((restaurant) => restaurant.city == city)
-                    .toList()
-                : _filteredRestaurants = _restaurants;
-          });
-          // print(filteredRestaurants.length);
-        },
-        child: Chip(
-          backgroundColor: fourthColor,
-          label: Text(city),
+          ],
         ),
       ),
+      
     );
+
   }
+
+
 
   Widget _buildRestaurants(BuildContext context, Restaurant restaurant) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, RestaurantDetailPage.routeName,
-            arguments: restaurant);
+            arguments: restaurant.id);
       },
       child: Card(
         color: thirdColor,
@@ -159,7 +119,7 @@ class _RestaurantsListPageState extends State<RestaurantsListPage> {
               child: Hero(
                 tag: restaurant.id,
                 child: Image.network(
-                  restaurant.pictureId,
+                  "https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}",
                   loadingBuilder: loadingBuilderImage,
                   errorBuilder: imageErrorHandler,
                   fit: BoxFit.cover,
@@ -194,3 +154,5 @@ class _RestaurantsListPageState extends State<RestaurantsListPage> {
     );
   }
 }
+
+

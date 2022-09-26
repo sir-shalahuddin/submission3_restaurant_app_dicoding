@@ -1,7 +1,7 @@
-import 'package:submission2_restaurant_app/data/model/items.dart';
+import 'package:submission2_restaurant_app/data/model/item.dart';
 
-class Menus {
-  Menus({
+class Menu {
+  Menu({
     this.foods,
     this.drinks,
   });
@@ -9,9 +9,8 @@ class Menus {
   List<Item>? foods;
   List<Item>? drinks;
 
-  factory Menus.fromJson(Map<String, dynamic> json) => Menus(
-    foods: List<Item>.from(json["foods"].map((x) => Item.fromJson(x))),
-    drinks: List<Item>.from(json["drinks"].map((x) => Item.fromJson(x))),
-  );
-
+  factory Menu.fromJson(Map<String, dynamic> json) => Menu(
+        foods: List<Item>.from(json["foods"].map((x) => Item.fromJson(x))),
+        drinks: List<Item>.from(json["drinks"].map((x) => Item.fromJson(x))),
+      );
 }

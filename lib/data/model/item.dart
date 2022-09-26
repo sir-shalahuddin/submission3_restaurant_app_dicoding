@@ -1,4 +1,4 @@
-class Item{
+class Item {
   Item({
     required this.name,
   });
