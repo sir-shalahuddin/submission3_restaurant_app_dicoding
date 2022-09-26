@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:submission1_restaurant_app/restaurant.dart';
+import 'package:submission2_restaurant_app/restaurant.dart';
 
 class Rating extends StatelessWidget {
   final Restaurant restaurant;

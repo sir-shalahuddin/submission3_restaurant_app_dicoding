@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:submission1_restaurant_app/restaurant.dart';
-import 'package:submission1_restaurant_app/styles.dart';
-import 'package:submission1_restaurant_app/widget/error_image_handler.dart';
-import 'package:submission1_restaurant_app/widget/loading_builder.dart';
-import 'package:submission1_restaurant_app/widget/rating_icon.dart';
+import 'package:submission2_restaurant_app/data/model/list_restaurant.dart';
+import 'package:submission2_restaurant_app/styles.dart';
+import 'package:submission2_restaurant_app/widget/error_image_handler.dart';
+import 'package:submission2_restaurant_app/widget/loading_builder.dart';
+import 'package:submission2_restaurant_app/widget/rating_icon.dart';
 
 class RestaurantDetailPage extends StatefulWidget {
   static const routeName = '/article_detail';
