@@ -35,7 +35,6 @@ class CustomerReviewsProvider extends ChangeNotifier {
   Future<dynamic> postReview() async {
     try {
       _addReviewState = ResultState.loading;
-
       notifyListeners();
       final data = await apiService.addReview(
           id, nameController.text, feedbackController.text);

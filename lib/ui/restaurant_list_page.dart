@@ -9,16 +9,11 @@ import 'package:submission2_restaurant_app/widgets/loading_builder.dart';
 import 'package:submission2_restaurant_app/widgets/rating_icon.dart';
 import 'package:submission2_restaurant_app/widgets/search_bar.dart';
 
-class RestaurantsListPage extends StatefulWidget {
+class RestaurantsListPage extends StatelessWidget {
   static const routeName = '/article_list';
 
   const RestaurantsListPage({Key? key}) : super(key: key);
 
-  @override
-  State<RestaurantsListPage> createState() => _RestaurantsListPageState();
-}
-
-class _RestaurantsListPageState extends State<RestaurantsListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,18 +35,18 @@ class _RestaurantsListPageState extends State<RestaurantsListPage> {
               child: Consumer<RestaurantsProvider>(
                 builder: (context, state, _) {
                   if (state.state == ResultState.loading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   } else if (state.state == ResultState.hasData) {
                     return GridView.builder(
-                      itemCount:
-                      state.restaurantList.length,
+                      itemCount: state.restaurantList.length,
                       itemBuilder: (context, index) {
                         return _buildRestaurants(
-                            context,
-                            state.restaurantList[index]);
+                            context, state.restaurantList[index]);
                       },
                       gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisSpacing: 0,
                         mainAxisSpacing: 15,
                         crossAxisCount: 2,
@@ -85,12 +80,8 @@ class _RestaurantsListPageState extends State<RestaurantsListPage> {
           ],
         ),
       ),
-      
     );
-
   }
-
-
 
   Widget _buildRestaurants(BuildContext context, Restaurant restaurant) {
     return GestureDetector(
@@ -114,8 +105,9 @@ class _RestaurantsListPageState extends State<RestaurantsListPage> {
           children: <Widget>[
             ClipRRect(
               borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(20),
-                  bottomLeft: Radius.circular(20)),
+                topRight: Radius.circular(20),
+                bottomLeft: Radius.circular(20),
+              ),
               child: Hero(
                 tag: restaurant.id,
                 child: Image.network(
@@ -154,5 +146,3 @@ class _RestaurantsListPageState extends State<RestaurantsListPage> {
     );
   }
 }
-
-

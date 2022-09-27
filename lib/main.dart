@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
               create: (_) => RestaurantProvider(
                   apiService: ApiService(),
                   id: ModalRoute.of(context)?.settings.arguments as String),
-              child: const RestaurantDetailPage(),
+              child: RestaurantDetailPage(),
             ),
       },
     );

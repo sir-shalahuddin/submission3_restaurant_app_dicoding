@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:submission2_restaurant_app/common/styles.dart';
 import 'package:submission2_restaurant_app/data/api/api_service.dart';
+import 'package:submission2_restaurant_app/data/model/customer_review.dart';
 import 'package:submission2_restaurant_app/data/model/item.dart';
 import 'package:submission2_restaurant_app/provider/customer_reviews.dart';
 import 'package:submission2_restaurant_app/provider/restaurant_provider.dart';
@@ -10,16 +11,11 @@ import 'package:submission2_restaurant_app/widgets/error_image_handler.dart';
 import 'package:submission2_restaurant_app/widgets/loading_builder.dart';
 import 'package:submission2_restaurant_app/widgets/rating_icon.dart';
 
-class RestaurantDetailPage extends StatefulWidget {
+class RestaurantDetailPage extends StatelessWidget {
   static const routeName = '/restaurant_detail';
 
-  const RestaurantDetailPage({Key? key}) : super(key: key);
+  RestaurantDetailPage({Key? key}) : super(key: key);
 
-  @override
-  State<RestaurantDetailPage> createState() => _RestaurantDetailPageState();
-}
-
-class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +45,9 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
         child: Consumer<RestaurantProvider>(
           builder: (context, state, _) {
             if (state.state == ResultState.loading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             } else if (state.state == ResultState.hasData) {
               return SingleChildScrollView(
                 child: Container(
@@ -59,10 +57,6 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                     children: [
                       Hero(
                         tag: state.result!.restaurant.id,
-                        createRectTween: (Rect? begin, Rect? end) {
-                          return MaterialRectCenterArcTween(
-                              begin: begin, end: end);
-                        },
                         child: Image.network(
                           "https://restaurant-api.dicoding.dev/images/medium/${state.result!.restaurant.pictureId}",
                           loadingBuilder: loadingBuilderImage,
@@ -173,9 +167,15 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                                 ),
                               ),
                             ),
-                            _buildMenu('Foods', 'assets/image/foods.png',
+                            _buildMenu(
+                                context,
+                                'Foods',
+                                'assets/image/foods.png',
                                 state.result!.restaurant.menus?.foods),
-                            _buildMenu('Drinks', 'assets/image/drinks.png',
+                            _buildMenu(
+                                context,
+                                'Drinks',
+                                'assets/image/drinks.png',
                                 state.result!.restaurant.menus?.drinks),
                             ChangeNotifierProvider(
                               create: (context) => CustomerReviewsProvider(
@@ -248,29 +248,29 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
             ? restaurantState.customerReviewsList.length + 1
             : reviewState.customerReviewsList.length + 1,
         itemBuilder: (context, index) {
-          if (index <=
-              (restaurantState != null
-                  ? restaurantState.customerReviewsList.length - 1
-                  : reviewState.customerReviewsList.length - 1)) {
-            return buildReviewTile(restaurantState ?? reviewState, index);
-          } else {
+          if (index == 0) {
             return buildAddReviewButton(context, reviewState);
+          } else {
+            return buildReviewTile(
+                restaurantState?.customerReviewsList ??
+                    reviewState.customerReviewsList,
+                index);
           }
         });
   }
 
-  Card buildReviewTile(dynamic state, int index) {
+  Card buildReviewTile(List<CustomerReview> state, int index) {
     return Card(
       color: fourthColor,
       child: ListTile(
         leading: const Icon(Icons.chat_outlined),
-        title: Text(state.customerReviewsList[index].name),
+        title: Text(state[state.length - index].name),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(state.customerReviewsList[index].review),
+            Text(state[state.length - index].review),
             Text(
-              state.customerReviewsList[index].date,
+              state[state.length - index].date,
               style: const TextStyle(fontSize: 12),
             ),
           ],
@@ -384,7 +384,8 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
     );
   }
 
-  Column _buildMenu(String title, String image, List<Item>? item) {
+  Column _buildMenu(
+      BuildContext context, String title, String image, List<Item>? item) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
