@@ -307,9 +307,10 @@ class RestaurantDetailPage extends StatelessWidget {
           showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
-              contentPadding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+              titlePadding: const EdgeInsets.symmetric(horizontal: 15,vertical: 20),
+              contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               actionsPadding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               backgroundColor: thirdColor,
               title: const Text("How is it?"),
               content: Form(
@@ -320,7 +321,7 @@ class RestaurantDetailPage extends StatelessWidget {
                     TextFormField(
                       controller: state2.nameController,
                       decoration: inputDecorationTemplate(
-                          const EdgeInsets.symmetric(horizontal: 20),
+                          const EdgeInsets.symmetric(horizontal: 10),
                           "Enter your name"),
                       validator: (value) =>
                           validatorInput(value, "Please enter your name first"),
@@ -329,7 +330,7 @@ class RestaurantDetailPage extends StatelessWidget {
                     TextFormField(
                       controller: state2.feedbackController,
                       decoration: inputDecorationTemplate(
-                          const EdgeInsets.fromLTRB(20, 50, 20, 50),
+                          const EdgeInsets.symmetric(horizontal: 10),
                           "Enter your Feedback"),
                       validator: (value) => validatorInput(
                           value, "Please enter your feedback first"),
