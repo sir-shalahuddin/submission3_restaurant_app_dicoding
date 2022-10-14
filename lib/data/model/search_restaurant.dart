@@ -1,4 +1,4 @@
-import 'package:submission2_restaurant_app/data/model/restaurant.dart';
+import 'package:submission3_restaurant_app/data/model/restaurant.dart';
 
 class SearchResult {
   SearchResult(

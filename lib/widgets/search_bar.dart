@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:submission2_restaurant_app/common/styles.dart';
-import 'package:submission2_restaurant_app/provider/restaurants_provider.dart';
+import 'package:submission3_restaurant_app/common/styles.dart';
+import 'package:submission3_restaurant_app/provider/restaurants_provider.dart';
 
 class SearchBar extends StatelessWidget {
   const SearchBar({

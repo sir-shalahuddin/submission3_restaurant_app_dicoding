@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:submission2_restaurant_app/data/api/api_service.dart';
-import 'package:submission2_restaurant_app/data/model/add_review.dart';
-import 'package:submission2_restaurant_app/data/model/customer_review.dart';
-import 'package:submission2_restaurant_app/provider/restaurants_provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:submission3_restaurant_app/data/api/api_service.dart';
+import 'package:submission3_restaurant_app/data/model/add_review.dart';
+import 'package:submission3_restaurant_app/data/model/customer_review.dart';
+import 'package:submission3_restaurant_app/provider/restaurants_provider.dart';
 
 class CustomerReviewsProvider extends ChangeNotifier {
   final ApiService apiService;
@@ -37,7 +38,7 @@ class CustomerReviewsProvider extends ChangeNotifier {
       _addReviewState = ResultState.loading;
       notifyListeners();
       final data = await apiService.addReview(
-          id, nameController.text, feedbackController.text);
+          http.Client(), id, nameController.text, feedbackController.text);
 
       if (data.customerReviews.isEmpty) {
         _addReviewState = ResultState.noData;

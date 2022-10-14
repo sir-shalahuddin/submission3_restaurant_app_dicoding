@@ -1,6 +1,6 @@
-import 'package:submission2_restaurant_app/data/model/customer_review.dart';
-import 'package:submission2_restaurant_app/data/model/item.dart';
-import 'package:submission2_restaurant_app/data/model/menu.dart';
+import 'package:submission3_restaurant_app/data/model/customer_review.dart';
+import 'package:submission3_restaurant_app/data/model/item.dart';
+import 'package:submission3_restaurant_app/data/model/menu.dart';
 
 class Restaurant {
   Restaurant({
@@ -16,17 +16,15 @@ class Restaurant {
     this.customerReviews,
   });
 
-  String id;
-  String name;
-  String description;
-  String pictureId;
-  String city;
-  double rating;
+  String? id;
+  String? name;
+  String? description;
+  String? pictureId;
+  String? city;
+  double? rating;
   String? address;
-
   List<Item>? categories;
   Menu? menus;
-
   List<CustomerReview>? customerReviews;
 
   factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
@@ -46,4 +44,34 @@ class Restaurant {
             : List<CustomerReview>.from(
                 json["customerReviews"].map((x) => CustomerReview.fromJson(x))),
       );
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'pictureId': pictureId,
+      'city': city,
+      'rating': rating,
+      'address': address
+    };
+  }
+
+  Restaurant.fromMap(Map<String, dynamic> map) {
+    id = map['id'];
+    name = map['name'];
+    pictureId = map['pictureId'];
+    city = map['city'];
+    rating = map['rating'];
+    address = map['address'];
+  }
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "description": description,
+    "pictureId": pictureId,
+    "city": city,
+    "rating": rating,
+  };
+
 }

@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:submission2_restaurant_app/data/api/api_service.dart';
-import 'package:submission2_restaurant_app/data/model/list_restaurant.dart';
-import 'package:submission2_restaurant_app/data/model/restaurant.dart';
-import 'package:submission2_restaurant_app/data/model/search_restaurant.dart';
+import 'package:http/http.dart' as http;
+import 'package:submission3_restaurant_app/data/api/api_service.dart';
+import 'package:submission3_restaurant_app/data/model/list_restaurant.dart';
+import 'package:submission3_restaurant_app/data/model/restaurant.dart';
+import 'package:submission3_restaurant_app/data/model/search_restaurant.dart';
 
 enum ResultState { loading, noData, hasData, error }
 
@@ -41,7 +42,7 @@ class RestaurantsProvider extends ChangeNotifier {
       _state = ResultState.loading;
 
       notifyListeners();
-      final data = await apiService.getRestaurants();
+      final data = await apiService.getRestaurants(http.Client());
       if (data.restaurants.isEmpty) {
         _state = ResultState.noData;
         notifyListeners();
@@ -71,7 +72,7 @@ class RestaurantsProvider extends ChangeNotifier {
       _state = ResultState.loading;
 
       notifyListeners();
-      final data = await apiService.searchRestaurants(query);
+      final data = await apiService.searchRestaurants(http.Client(), query);
       if (data.restaurants.isEmpty) {
         _state = ResultState.noData;
         notifyListeners();

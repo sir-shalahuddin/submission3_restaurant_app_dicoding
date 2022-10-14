@@ -1,28 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:submission2_restaurant_app/common/styles.dart';
-import 'package:submission2_restaurant_app/data/model/restaurant.dart';
-import 'package:submission2_restaurant_app/provider/restaurants_provider.dart';
-import 'package:submission2_restaurant_app/ui/restaurant_detail_page.dart';
-import 'package:submission2_restaurant_app/widgets/error_image_handler.dart';
-import 'package:submission2_restaurant_app/widgets/loading_builder.dart';
-import 'package:submission2_restaurant_app/widgets/rating_icon.dart';
-import 'package:submission2_restaurant_app/widgets/search_bar.dart';
+import 'package:submission3_restaurant_app/common/navigation.dart';
+import 'package:submission3_restaurant_app/common/styles.dart';
+import 'package:submission3_restaurant_app/data/model/restaurant.dart';
+import 'package:submission3_restaurant_app/provider/restaurants_provider.dart';
+import 'package:submission3_restaurant_app/ui/favourite_restaurant_page.dart';
+import 'package:submission3_restaurant_app/ui/restaurant_detail_page.dart';
+import 'package:submission3_restaurant_app/ui/setting_page.dart';
+import 'package:submission3_restaurant_app/utils/notification_helper.dart';
+import 'package:submission3_restaurant_app/widgets/error_image_handler.dart';
+import 'package:submission3_restaurant_app/widgets/loading_builder.dart';
+import 'package:submission3_restaurant_app/widgets/rating_icon.dart';
+import 'package:submission3_restaurant_app/widgets/search_bar.dart';
 
-class RestaurantsListPage extends StatelessWidget {
-  static const routeName = '/article_list';
+class RestaurantsListPage extends StatefulWidget {
+  static const routeName = '/restaurant_list';
 
   const RestaurantsListPage({Key? key}) : super(key: key);
+
+  @override
+  State<RestaurantsListPage> createState() => _RestaurantsListPageState();
+}
+
+class _RestaurantsListPageState extends State<RestaurantsListPage> {
+  final NotificationHelper _notificationHelper = NotificationHelper();
+
+  @override
+  void initState() {
+    super.initState();
+    _notificationHelper
+        .configureSelectNotificationSubject(RestaurantDetailPage.routeName);
+  }
+
+  @override
+  void dispose() {
+    selectNotificationSubject.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Restaurant App',
-          style: Theme.of(context).textTheme.headline4,
         ),
-        backgroundColor: primaryColor,
+        backgroundColor: thirdColor,
+        actionsIconTheme: const IconThemeData(
+          color: primaryColor,
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigation.intentWithData(FavouriteRestaurantPage.routeName, context);
+            },
+            icon: const Icon(Icons.favorite),
+          ),
+          IconButton(
+            onPressed: (){
+              Navigation.intentWithData(SettingPage.routeName, context);
+            },
+            icon :const Icon(
+              Icons.settings,
+
+            )
+          )
+        ],
       ),
       body: Container(
         color: secondaryColor,
@@ -86,8 +129,7 @@ class RestaurantsListPage extends StatelessWidget {
   Widget _buildRestaurants(BuildContext context, Restaurant restaurant) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, RestaurantDetailPage.routeName,
-            arguments: restaurant.id);
+        Navigation.intentWithData(RestaurantDetailPage.routeName, restaurant);
       },
       child: Card(
         color: thirdColor,
@@ -109,7 +151,7 @@ class RestaurantsListPage extends StatelessWidget {
                 bottomLeft: Radius.circular(20),
               ),
               child: Hero(
-                tag: restaurant.id,
+                tag: restaurant.id!,
                 child: Image.network(
                   "https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}",
                   loadingBuilder: loadingBuilderImage,
@@ -125,18 +167,20 @@ class RestaurantsListPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    restaurant.name,
+                    restaurant.name!,
                     style: Theme.of(context).textTheme.subtitle1,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    restaurant.city,
+                    restaurant.city!,
                     style: Theme.of(context).textTheme.subtitle2,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Rating(restaurant: restaurant),
+                  Container(
+                      margin: const EdgeInsets.only(top: 15),
+                      child: Rating(restaurant: restaurant, mainAxisAlignment: MainAxisAlignment.spaceBetween,)),
                 ],
               ),
             ),
