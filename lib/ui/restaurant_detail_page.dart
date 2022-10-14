@@ -313,29 +313,31 @@ class RestaurantDetailPage extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               backgroundColor: thirdColor,
               title: const Text("How is it?"),
-              content: Form(
-                key: state2.formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      controller: state2.nameController,
-                      decoration: inputDecorationTemplate(
-                          const EdgeInsets.symmetric(horizontal: 10),
-                          "Enter your name"),
-                      validator: (value) =>
-                          validatorInput(value, "Please enter your name first"),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: state2.feedbackController,
-                      decoration: inputDecorationTemplate(
-                          const EdgeInsets.symmetric(horizontal: 10),
-                          "Enter your Feedback"),
-                      validator: (value) => validatorInput(
-                          value, "Please enter your feedback first"),
-                    ),
-                  ],
+              content: SingleChildScrollView(
+                child: Form(
+                  key: state2.formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        controller: state2.nameController,
+                        decoration: inputDecorationTemplate(
+                            const EdgeInsets.symmetric(horizontal: 10),
+                            "Enter your name"),
+                        validator: (value) =>
+                            validatorInput(value, "Please enter your name first"),
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: state2.feedbackController,
+                        decoration: inputDecorationTemplate(
+                            const EdgeInsets.symmetric(horizontal: 10),
+                            "Enter your Feedback"),
+                        validator: (value) => validatorInput(
+                            value, "Please enter your feedback first"),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               actions: <Widget>[
