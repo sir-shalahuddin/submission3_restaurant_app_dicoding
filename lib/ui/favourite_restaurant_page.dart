@@ -46,7 +46,8 @@ class FavouriteRestaurantPage extends StatelessWidget {
                     onTap: () {
                       Navigator.pushNamed(
                           context, RestaurantDetailPage.routeName,
-                          arguments: state.restaurant[index]);
+                          arguments: state.restaurant[index]).then((value) =>
+                      {state.getAllRestaurants()});
                     },
                     leading: Image.network(
                       "https://restaurant-api.dicoding.dev/images/small/${state.restaurant[index].pictureId}",

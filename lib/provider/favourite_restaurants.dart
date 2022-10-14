@@ -12,15 +12,15 @@ class FavouriteProvider extends ChangeNotifier {
 
  FavouriteProvider(){
    _dbHelper = DatabaseHelper();
-   _getAllRestaurants().then((value) => setRestaurant(value));
+   getAllRestaurants().then((value) => setRestaurant(value));
  }
 
  Future<void> addRestaurant(Restaurant restaurant) async {
    await _dbHelper.insertRestaurant(restaurant);
-   _getAllRestaurants();
+   getAllRestaurants();
  }
 
- Future<dynamic> _getAllRestaurants() async {
+ Future<dynamic> getAllRestaurants() async {
    _restaurants = await _dbHelper.getRestaurants();
    notifyListeners();
    return _restaurants;
@@ -28,7 +28,7 @@ class FavouriteProvider extends ChangeNotifier {
 
  void deleteRestaurant(String id) async {
    await _dbHelper.deleteRestaurant(id);
-   _getAllRestaurants();
+   getAllRestaurants();
  }
 
  void setRestaurant(List<Restaurant> value) {
